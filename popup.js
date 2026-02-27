@@ -6,6 +6,7 @@
 const usersDiv = document.getElementById("users");
 const addBtn = document.getElementById("addUser");
 const usernameInput = document.getElementById("username");
+const refreshBtn = document.getElementById("refreshBtn");
 
 // --- Storage Helpers ---
 
@@ -151,6 +152,16 @@ async function addUser() {
     addBtn.textContent = "Add";
 }
 
+async function refreshUsers() {
+    if (!refreshBtn) return;
+    refreshBtn.disabled = true;
+    const originalLabel = refreshBtn.textContent;
+    refreshBtn.textContent = "…";
+    await loadUsers();
+    refreshBtn.textContent = originalLabel;
+    refreshBtn.disabled = false;
+}
+
 async function deleteUser(username) {
     let stored = await getUsers();
     stored = stored.filter(u => u !== username);
@@ -166,6 +177,10 @@ addBtn.addEventListener("click", addUser);
 usernameInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") addUser();
 });
+
+if (refreshBtn) {
+    refreshBtn.addEventListener("click", refreshUsers);
+}
 
 // Initial load
 document.addEventListener("DOMContentLoaded", loadUsers);

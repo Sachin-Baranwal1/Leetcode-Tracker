@@ -41,13 +41,13 @@ h2 {
   gap: 8px;
 }
 
-/* Container for input and button */
+/* Container for input and buttons */
 .input-box {
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
   position: relative;
-  
+  align-items: center;
 }
 
 input {
@@ -84,6 +84,20 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.secondary-btn {
+  padding-inline: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  font-weight: 600;
+}
+
+.secondary-btn:hover {
+  background: rgba(30, 64, 175, 0.6);
+  color: var(--text-primary);
+  border-color: transparent;
 }
 
 button:hover {
@@ -128,8 +142,8 @@ button:active {
   font-size: 0.8125rem;
   color: var(--text-secondary);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
 }
 
 .stats-item {
@@ -137,7 +151,7 @@ button:active {
   padding: 8px;
   border-radius: 6px;
   text-align: center;
-  
+  border: 1px solid rgba(148, 163, 184, 0.15);
 }
 
 .stats-label {
