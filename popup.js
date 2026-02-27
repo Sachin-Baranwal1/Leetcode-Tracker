@@ -68,6 +68,7 @@ function createStatItem(label, value) {
 }
 
 async function loadUsers() {
+    if (!usersDiv) return;
     // Show loading state if it's the first load
     if (usersDiv.innerHTML === "") {
         usersDiv.innerHTML = '<div style="text-align:center; padding: 20px; color: #94a3b8;">Loading profiles...</div>';
@@ -103,7 +104,7 @@ async function loadUsers() {
                 const getCount = (diff) => statsArray.find(x => x.difficulty === diff)?.count || 0;
                 const rankingValue = data.profile?.ranking;
                 const rankingText = typeof rankingValue === "number"
-                    ? \`#\${rankingValue.toLocaleString()}\`
+                    ? "#" + rankingValue.toLocaleString()
                     : "N/A";
 
                 card.innerHTML = `
@@ -136,6 +137,7 @@ async function loadUsers() {
 // --- Actions ---
 
 async function addUser() {
+    if (!usernameInput) return;
     const username = usernameInput.value.trim();
     if (!username) return;
 
@@ -182,12 +184,16 @@ async function deleteUser(username) {
 
 // --- Event Listeners ---
 
-addBtn.addEventListener("click", addUser);
+if (addBtn) {
+    addBtn.addEventListener("click", addUser);
+}
 
 // Add on "Enter" key press
-usernameInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") addUser();
-});
+if (usernameInput) {
+    usernameInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") addUser();
+    });
+}
 
 if (refreshBtn) {
     refreshBtn.addEventListener("click", refreshUsers);
