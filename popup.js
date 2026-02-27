@@ -92,28 +92,39 @@ async function loadUsers() {
         const card = document.createElement("div");
         card.className = "card";
 
-        if (!data) {
-            card.innerHTML = `
-                <h3>${username} <span style="color: #ef4444; font-size: 10px;">Offline/Error</span></h3>
-                <button class="delete-btn">Remove</button>
-            `;
-        } else {
-            const stats = data.submitStats.acSubmissionNum;
-            const getCount = (diff) => stats.find(x => x.difficulty === diff)?.count || 0;
+        try {
+            if (!data) {
+                card.innerHTML = `
+                    <h3>${username} <span style="color: #ef4444; font-size: 10px;">Offline/Error</span></h3>
+                    <button class="delete-btn">Remove</button>
+                `;
+            } else {
+                const statsArray = data.submitStats?.acSubmissionNum || [];
+                const getCount = (diff) => statsArray.find(x => x.difficulty === diff)?.count || 0;
+                const rankingValue = data.profile?.ranking;
+                const rankingText = typeof rankingValue === "number"
+                    ? \`#\${rankingValue.toLocaleString()}\`
+                    : "N/A";
 
+                card.innerHTML = `
+                    <h3>
+                        <span>${data.username}</span>
+                        <span style="font-size: 0.75rem; color: #22c55e;">${rankingText}</span>
+                    </h3>
+                    <div class="stats">
+                        ${createStatItem("Total", getCount("All"))}
+                        ${createStatItem("Easy", getCount("Easy"))}
+                        ${createStatItem("Medium", getCount("Medium"))}
+                        ${createStatItem("Hard", getCount("Hard"))}
+                    </div>
+                    <button class="delete-btn">Remove Profile</button>
+                `;
+            }
+        } catch (error) {
+            console.error(`Error rendering user ${username}:`, error);
             card.innerHTML = `
-                <h3>
-                    <span>${data.username}</span>
-                    <span style="font-size: 0.75rem; color: #22c55e;">#${data.profile.ranking.toLocaleString()}</span>
-                </h3>
-                <div class="stats">
-                   <div style="color: grey; font-weight: 700">  ${createStatItem("Total", getCount("All"))}</div>
-                    <div style="background-color: cyan; color: black; font-weight: 700;">${createStatItem("Easy", getCount("Easy"))}</div>
-                    <div style="background-color: orange; color: black; font-weight: 700;">${createStatItem("Medium", getCount("Medium"))}</div>
-                    <div style="background-color: red; color: black; font-weight: 700;">${createStatItem("Hard", getCount("Hard"))}</div>
-                    
-                </div>
-                <button class="delete-btn">Remove Profile</button>
+                <h3>${username} <span style="color: #ef4444; font-size: 10px;">Error loading</span></h3>
+                <button class="delete-btn">Remove</button>
             `;
         }
 
